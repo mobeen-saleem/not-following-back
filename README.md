@@ -1,0 +1,28 @@
+this is the first version of this program. its a very straightforward process but you must follow every step for this to work
+- download obsidian here
+	- it's just a free notetaking app but its important for this process. you'll see why.
+- log into instagram on web, go to your following (or anyones), highlight the first name then go down to fast copy all the usernames
+- if you've just installed obsidian, create a new obsidian vault and name it what you like ("brain" or just "vault" are examples if you cant think of a name)
+- create an obsidian file and name it "following" or something similar (the name of this doesn't matter, but when you have to name something specifically it'll be stated)
+- paste this into obsidian
+	- notice how there's links between each username. this is very important, it's why we have to paste specifically in obsidian. pasting straight into notepad, word, excel etc won't paste it in this format.
+	- [pic showing this but again for celebrities]
+- copy your followers list and do the same thing in a new file
+- download extract-usernames.py and not-following-back.py from above (just click each file above then click the download buttons)
+- create a new folder, name it what you like (like "not following back" or something else you'll remember) then move both files into this new folder
+- open Notepad
+	- or your text editor of choice. notepad is preinstalled on windows, for mac i believe its TextEdit
+- copy the "following" contents from your obsidian file
+	- control A then control C
+- paste into notepad and save as "IGfollowing.txt" - it ***must*** be named this
+- do the same for followers
+- move these txt files into the ***same*** folder you created earlier
+- go inside the folder then copy the link to the folder at the top
+- open your terminal and type 
+	- ```cd [pasted link]```
+	- should look something like this
+	- press enter
+- ```python extract-usernames.py```
+- ```python not-following-back.py```
+- done! this new "not-following-back.txt" will list everyone who doesn't follow you back. this will also obviously list the celebrities who don't follow you back but its very easy to just scan through the list and see who isn't a celebrity.
+- if you want to do this again you can literally just clear and repaste "IGfollowers.txt" and "IGfollowing.txt", run the 2 python scripts again and it'll automatically reupdate "not-following-back.txt" without you having to delete and remake the files!
