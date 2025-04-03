@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Not Following Back Checker</title>
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+    <div class="container">
+        <h1>Instagram Not Following Back Checker</h1>
+        <p class="caption">Find out who isn't following you back on Instagram. Desktop only (Instagram's fault not mine)</p>
+
+        <div class="tutorial">
+            <p><strong>How to Copy Lists:</strong></p>
+            <video controls style="max-width: 50%; height: auto;">
+                <source src="copyfollowing.mp4" type="video/mp4">
+            </video>
+            <p><small>Log in to <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a> on your computer. Open your Following list, scroll to the bottom, then Ctrl+C. Paste below. Repeat for Followers.</small></p>
+            <p>I know it looks kinda long but it's the quickest way to do it and I promise it takes barely any time.</p>
+        </div>
+
+        <form id="checker-form">
+            <div class="input-container">
+                <div class="input-group">
+                    <label for="following_list">Paste Your 'Following' List Here:</label>
+                    <textarea id="following_list" name="following_list" rows="15" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="followers_list">Paste Your 'Followers' List Here:</label>
+                    <textarea id="followers_list" name="followers_list" rows="15" required></textarea>
+                </div>
+            </div>
+
+            <p id="error-message" class="error-message" style="display: none;"></p>
+
+            <button type="submit" id="check-button">Check Who Isn't Following Back</button>
+        </form>
+
+        <div id="output-section" class="output-container" style="display: none;">
+             <h2>Users Not Following You Back</h2>
+            <pre id="results"></pre>
+        </div>
+
+    </div> <script>
+        // Wait for the HTML document to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get references to the HTML elements
+            const form = document.getElementById('checker-form');
+            const followingTextArea = document.getElementById('following_list');
+            const followersTextArea = document.getElementById('followers_list');
+            const checkButton = document.getElementById('check-button'); // Not strictly needed if using form submit event
+            const resultsPre = document.getElementById('results');
+            const outputSection = document.getElementById('output-section');
+            const errorMessageP = document.getElementById('error-message');
+            const resultCountSpan = document.getElementById('result-count');
+
+            // Listen for the form submission event
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent the default form submission which reloads the page
+
+                // 1. Clear previous results and errors
+                resultsPre.textContent = '';
+               // resultCountSpan.textContent = '0';
+                outputSection.style.display = 'none'; // Hide output section initially
+                errorMessageP.style.display = 'none'; // Hide error message initially
+                errorMessageP.textContent = '';
+
+                // 2. Get raw text from textareas
+                const followingRaw = followingTextArea.value;
+                const followersRaw = followersTextArea.value;
+
+                // 3. Basic Validation
+                if (!followingRaw.trim() || !followersRaw.trim()) {
+                    errorMessageP.textContent = 'Please paste data into both text boxes.';
+                    errorMessageP.style.display = 'block'; // Show error message
+                    return; // Stop processing
+                }
+
+                try {
+                    // 4. Process lists: split, trim, filter empty lines
+                    const processList = (rawText) => {
+                        return rawText
+                            .split('\n') // Split into lines
+                            .map(line => line.trim()) // Remove leading/trailing whitespace
+                            .filter(line => line); // Remove empty lines
+                    };
+
+                    const followingList = processList(followingRaw);
+                    const followersList = processList(followersRaw);
+
+                    // 5. Find non-followers using a Set for efficiency
+                    const followersSet = new Set(followersList);
+                    const notFollowingBack = followingList.filter(user => !followersSet.has(user));
+
+                    // 6. Display results
+                  // resultCountSpan.textContent = notFollowingBack.length; // Update count
+
+                    if (notFollowingBack.length > 0) {
+                        resultsPre.textContent = notFollowingBack.join('\n'); // Add users separated by newlines
+                    } else {
+                        resultsPre.textContent = "Everyone you follow seems to follow you back, or the lists were identical!";
+                    }
+
+                    outputSection.style.display = 'block'; // Show the output section
+
+                } catch (error) {
+                    // Handle unexpected errors during processing
+                    console.error("Error during list comparison:", error);
+                    errorMessageP.textContent = 'An unexpected error occurred during processing. Please check your lists or try again.';
+                    errorMessageP.style.display = 'block';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
